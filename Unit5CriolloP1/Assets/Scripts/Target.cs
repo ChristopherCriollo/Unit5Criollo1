@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Target : MonoBehaviour
 {
-   
+
     private GameManager gameManager;
     private Rigidbody targetRb;
     private float minSpeed = 12;
@@ -19,7 +19,7 @@ public class Target : MonoBehaviour
     void Start()
     {
         targetRb = GetComponent<Rigidbody>();
-        
+
 
         targetRb.AddForce(RandomForce(), ForceMode.Impulse);
         targetRb.AddTorque(RandomTorque(), RandomTorque(), RandomTorque(), ForceMode.Impulse);
@@ -38,30 +38,39 @@ public class Target : MonoBehaviour
         Destroy(gameObject);
         Instantiate(explosionParticle, transform.position, explosionParticle.transform.rotation);
         gameManager.UpdateScore(pointValue);
-        
+
     }
 
-   
+
 
     private void OnTriggerEnter(Collider other)
     {
         Destroy(gameObject);
-    }
-    Vector3 RandomForce()
-    {
-        return Vector3.up * Random.Range(minSpeed, maxSpeed);
+        if (!gameObject.CompareTag("Bad"))
+        {
+            gameManager.GameOver();
+
+        }
     }
 
-    float RandomTorque()
-    {
-        return Random.Range(-maxTorque, maxTorque);
+          
+
+        Vector3 RandomForce()
+        {
+            return Vector3.up * Random.Range(minSpeed, maxSpeed);
+        }
+
+        float RandomTorque()
+        {
+            return Random.Range(-maxTorque, maxTorque);
+        }
+
+        Vector3 RandomSpawnPos()
+        {
+            return new Vector3(Random.Range(-xRange, xRange), ySpawnPos);
+        }
     }
 
-    Vector3 RandomSpawnPos()
-    {
-       return new Vector3(Random.Range(-xRange, xRange), ySpawnPos);
-    }
-}
 
 
 
